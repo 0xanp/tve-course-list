@@ -39,7 +39,6 @@ class HelloFrame(wx.Frame):
         self.end_date = self.enddatepicker.PyGetDate()
         vertical_container = wx.BoxSizer(wx.VERTICAL)
         vertical_container.AddSpacer(10)
-        #vertical_container.Add(wx_util.h1(self, label='Select a Date'), 0, wx.LEFT | wx.RIGHT, 15)
         vertical_container.AddSpacer(10)
         vertical_container.Add(self.startdatepicker, 0, wx.EXPAND | wx.LEFT | wx.RIGHT, 15)
         vertical_container.Add(self.enddatepicker, 0, wx.EXPAND | wx.LEFT | wx.RIGHT, 15)
@@ -167,7 +166,6 @@ class HelloFrame(wx.Frame):
                 temp_date = output_df.loc[output_df['Tên Lớp']==temp_name,('Diễn Giải')].to_list()[0]
                 temp_date = temp_date[temp_date.find("(")+1:temp_date.find(")")]
                 output_df.loc[output_df['Tên Lớp']==temp_name,('Diễn Giải')] = temp_date
-                #st.success(course.split('\n')[0],icon="✅")
                 del [[temp_midterms, course_df, temp_name, temp_date, table_header, table_data]]
                 gc.collect()
                 percent += 1
@@ -175,6 +173,8 @@ class HelloFrame(wx.Frame):
             except:
                 percent += 1
                 self.progress.Update(percent)
+                midterm_dates.append("")
+                final_dates.append("")
                 pass
         output_df = output_df.rename(columns={"Diễn Giải": "Giờ Học","Thời khóa biểu": "Ngày Học"})
         output_df['Midterm Dates'] = midterm_dates
@@ -189,14 +189,6 @@ class HelloFrame(wx.Frame):
             output_df.to_excel(writer, sheet_name='Sheet1')
             # Close the Pandas Excel writer and output the Excel file to the buffer
             writer.save()
-            '''
-            st.download_button(
-                label="Download Excel worksheets",
-                data=buffer,
-                file_name=f'{start_date}-to-{end_date}.xlsx',
-                mime="application/vnd.ms-excel"
-            )
-            '''
         print(f"Total No of Students: {output_df['Sĩ số'].sum()}")
         end_time = datetime.now()
         print('Duration: {}'.format(end_time - start_time))
@@ -204,31 +196,10 @@ class HelloFrame(wx.Frame):
         gc.collect()
 
 
-
-
 if __name__ == '__main__':
     # When this module is run (not imported) then create the app, the
     # frame, show it, and start the event loop.
     app = wx.App()
-    frm = HelloFrame(None, title='Hello World 2')
+    frm = HelloFrame(None, title='Course List')
     frm.Show()
     app.MainLoop()
-
-
-
-
-
-
-
-
-
-'''
-start_date = st.date_input('Select Start Date', datetime.today())
-
-end_date = st.date_input('Select End Date', datetime.today() + timedelta(days=7))
-
-all_courses = st.button('Show All Course')
-
-
-if all_courses:
-'''
