@@ -10,10 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
-from datetime import datetime, timedelta
-from xlsxwriter import Workbook
-import gc
-from pandasgui import show
+from datetime import datetime
 
 load_dotenv()
 MANAGER_USERNAME = os.getenv("MANAGER_USERNAME")
@@ -192,7 +189,6 @@ class HelloFrame(wx.Frame):
         print(f"Total No of Students: {output_df['Sĩ số'].sum()}")
         end_time = datetime.now()
         print('Duration: {}'.format(end_time - start_time))
-        show(output_df)
 
 if __name__ == '__main__':
     # When this module is run (not imported) then create the app, the
