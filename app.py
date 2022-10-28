@@ -3,7 +3,6 @@ import wx.adv
 import pandas as pd
 from dotenv import load_dotenv
 import os
-import io
 import time
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait, Select
@@ -109,19 +108,17 @@ class HelloFrame(wx.Frame):
 
     def OnStartDateChanged(self, evt):
         self.start_date = evt.PyGetDate()
-        #self.startdatepicker.SetDate(self.start_date)
         self.start_date = datetime.strptime(self.start_date.strftime('%d/%m/%Y'),'%d/%m/%Y').date()
-        print(self.start_date, type(self.start_date))
+        #print(self.start_date, type(self.start_date))
 
     def OnEndDateChanged(self, evt):
         self.end_date = evt.PyGetDate()
-        #self.enddatepicker.SetDate(self.end_date)
         self.end_date = datetime.strptime(self.end_date.strftime('%d/%m/%Y'),'%d/%m/%Y').date()
-        print(self.end_date, type(self.end_date))
+        #print(self.end_date, type(self.end_date))
 
     def OnOkClick(self, evt):
         driver, courses_df, course_select = self.load_options()
-        start_time = datetime.now()
+        #start_time = datetime.now()
         commencement = []
         ending = []
         for i in range(len(courses_df)):
@@ -179,16 +176,18 @@ class HelloFrame(wx.Frame):
         output_df = output_df[output_df['Sĩ số'] != 0]
         output_df["Commencement Date"] = output_df["Commencement Date"].apply(lambda x: x.strftime('%d/%m/%Y'))
         output_df = output_df[["Tên Lớp","Giờ Học","Ngày Học","Sĩ số","Commencement Date","Midterm Dates","Final Dates"]].sort_values(['Giờ Học'], ascending=True).reset_index(drop=True)
-        buffer = io.BytesIO()
+        output_df.index += 1
         # Create a Pandas Excel writer using XlsxWriter as the engine.
         with pd.ExcelWriter(f"Course-List-{self.start_date}-{self.end_date}.xlsx", engine='xlsxwriter') as writer:
             # Write each dataframe to a different worksheet.
             output_df.to_excel(writer, sheet_name='Sheet1')
             # Close the Pandas Excel writer and output the Excel file to the buffer
             writer.save()
+        '''
         print(f"Total No of Students: {output_df['Sĩ số'].sum()}")
         end_time = datetime.now()
         print('Duration: {}'.format(end_time - start_time))
+        '''
 
 if __name__ == '__main__':
     # When this module is run (not imported) then create the app, the
